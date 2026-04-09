@@ -1,0 +1,81 @@
+@startuml
+left to right direction
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+skinparam monochrome true
+skinparam linetype ortho
+
+package forum {
+
+class Board {
+  - slogan : String
+  - topics : Topic[]
+  + Board(String)
+  + getSlogan() : String
+  + getTopics() : Topic[]
+  + setSlogan(String) : void
+  + addTopic(String) : Topic
+}
+
+class Topic {
+  - title : String
+  - messages : Message[]
+  + Topic(String)
+  + getTitle() : String
+  + setTitle(String) : void
+  + getMessages() : Message[]
+  + addMessage(Author, String, String) : Message
+  + addMessage(Author, String, String, LocalDateTime) : Message
+}
+
+class Message {
+  - title : String
+  - content : String
+  - created : LocalDateTime
+  - author : Author
+  - comments : Comment[]
+  + Message(Author, String, String, LocalDateTime)
+  + getAuthor() : Author
+  + getTitle() : String
+  + getContent() : String
+  + getCreated() : LocalDateTime
+  + getComments() : Comment[]
+  + setTitle(String) : void
+  + setContent(String) : void
+  + addComment(Author, String) : Comment
+}
+
+class Comment {
+  - content : String
+  - created : LocalDateTime
+  - author : Author
+  + Comment(Author, String, LocalDateTime)
+  + getAuthor() : Author
+  + getContent() : String
+  + getCreated() : LocalDateTime
+  + setContent(String) : void
+}
+
+class Author {
+  - name : String
+  - username : String
+  - birthday : LocalDate
+  + Author(String, String, LocalDate)
+  + getName() : String
+  + getUsername() : String
+  + getBirthday() : LocalDate
+  + setName(String) : void
+}
+
+Board "1" *-- "0..*" Topic : topics
+Topic "1" *-- "0..*" Message : messages
+Message "1" *-- "0..*" Comment : comments
+Message "0..*" --> "1" Author : author
+Comment "0..*" --> "1" Author : author
+
+Board -[hidden]-> Topic
+Topic -[hidden]-> Message
+Author -[hidden]-> Comment
+}
+
+@enduml
